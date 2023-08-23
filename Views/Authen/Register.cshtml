@@ -1,0 +1,33 @@
+﻿@model ProjectManagementPRN221.Models.Account
+@using Microsoft.AspNetCore.Http
+@using ProjectManagementPRN221.Extensions
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Register";
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
+}
+
+@if (account == null)
+{
+    <h1>Login</h1>
+
+    <h4></h4>
+    <hr />
+    <form method="post" asp-controller="Authen" asp-action="Login" class="form-control">
+        <h3>Email: </h3><hr />
+        <input class="form-control" name="email" required /><hr />
+        <h3>Password: </h3><hr />
+        <input type="password" class="form-control" name="password" required /><hr />
+        <input type="submit" value="Login" />
+    </form>
+    <hr />
+    <a asp-action="Register" asp-controller="Authen"><h3>Register</h3></a>
+    <hr />
+    <p style="color: red">@ViewBag.Error</p>
+}
+else
+{
+    <h1>Hello @account.Email</h1>
+    <a asp-action="Logout" asp-controller="Authen">Logout</a>
+}
+

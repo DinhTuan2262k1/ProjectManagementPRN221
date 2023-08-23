@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjectManagementPRN221.Models.Team>
+@using Microsoft.AspNetCore.Http
+@using ProjectManagementPRN221.Extensions
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
+    Student student = HttpContextAccessor.HttpContext.Session.Get<Student>("student");
+}
+
+<h1>Index</h1>
+@if (account != null)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfMember)
+            </th>
+            <th>
+                Leader
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfMember)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaderNavigation.StudentName)
+            </td>
+            <td>
+                    @if (account != null && (account.RoleId == 2 || item.Leader.Equals(student.Mssv)))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.TeamId">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.TeamId">Delete</a>
+                    } |
+                <a asp-action="Details" asp-route-id="@item.TeamId">Details</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

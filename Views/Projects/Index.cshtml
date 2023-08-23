@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ProjectManagementPRN221.Models.Project>
+@using Microsoft.AspNetCore.Http
+@using ProjectManagementPRN221.Extensions
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
+    Student student = HttpContextAccessor.HttpContext.Session.Get<Student>("student");
+}
+
+
+<h1>Index</h1>
+
+@if (account != null)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Topic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinishDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsFinished)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Topic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinishDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFinished)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.TeamName)
+            </td>
+            <td>
+                    @if (account!=null && (account.RoleId == 2 || student.Mssv == item.Team.Leader))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> 
+                        <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+                    } |
+                <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
